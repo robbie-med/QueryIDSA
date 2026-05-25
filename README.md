@@ -57,8 +57,28 @@ npm run typecheck
 
 ## Deploy
 
-Push to Vercel — no env vars required. The API routes run on the Node runtime
-(needed for `jsdom`); no Edge config necessary.
+**Vercel (recommended).** The app uses Next.js API routes with the Node
+runtime (jsdom needs it), so any host that supports Next.js server functions
+works. Vercel is the path of least resistance:
+
+1. Sign in at [vercel.com](https://vercel.com) with the GitHub account that
+   owns this repo.
+2. **Add New → Project** → import `robbie-med/QueryIDSA`.
+3. Framework preset auto-detects as **Next.js**. No environment variables are
+   needed. Leave build/output settings at defaults.
+4. **Deploy.** First build takes ~1 minute. You'll get a
+   `queryidsa-<hash>.vercel.app` URL immediately; you can attach a custom
+   domain afterward under Project Settings → Domains.
+5. Future pushes to `main` auto-deploy. PRs get preview URLs.
+
+**Why not GitHub Pages?** Pages is static-only. The `/api/guideline` route
+runs server-side to fetch IDSA pages and extract content — moving that to
+the browser fails because `idsociety.org` doesn't return CORS headers for
+cross-origin requests.
+
+**Health checks in production.** Once deployed, hit
+`https://<your-domain>/api/health` periodically (or wire it into a cron / uptime
+monitor) to be notified when IDSA reorganizes a guideline URL.
 
 ## Caveats
 
